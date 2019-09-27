@@ -7,32 +7,93 @@
 // Example: 5! = 5 x 4 x 3 x 2 x 1 = 120
 // factorial(5); // 120
 var factorial = function(n) {
+    // Base Case: if negative
+    if (n < 0){
+        return null;
+    }
+    // Base Case: if number is 0
+    if (n === 0){
+        return 1;
+    } 
+    // Recursive Case: if neither negative or 0, call again
+    return (n * factorial(n-1));
 };
 
 // 2. Compute the sum of an array of integers.
 // sum([1,2,3,4,5,6]); // 21
+
 var sum = function(array) {
+    var slice = array.slice();
+    // Base Case
+    if (slice.length === 0){
+        return 0;
+    }
+    // Recursive Case
+    return (slice.pop() + sum(slice));
 };
+
 
 // 3. Sum all numbers in an array containing nested arrays.
 // arraySum([1,[2,3],[[4]],5]); // 15
 var arraySum = function(array) {
+    var sum = 0;
+    for (var i=0; i < array.length; i++){
+        // Recursive Case: if element is an array
+        if (Array.isArray(array[i])){
+            sum += arraySum(array[i]);
+        // Base Case: if element is a number    
+        } else {
+            sum += array[i];
+        }
+    } return sum;
 };
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+    // Base Case: if n is even
+    if (n === 0) return true;
+
+    // Base Case: if n is odd
+    if (n === 1) return false;
+
+    // Recursive Case: if n is positive
+    if (n > 0) return (isEven(n-2));
+
+    // Recursive Case: if n is negative
+    if (n < 0) return (isEven(n+2));
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+    // Base Case: if n is 0
+    if (n === 0) return 0;
+
+    // Recursive Case: if n is positive
+    if (n > 0) return (n-1 + sumBelow(n-1));
+
+    // Recursive Case: if  n is negative
+    else return (n+1 + sumBelow(n+1));
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+    // Base Case: if difference btw y and x is 0 or 1
+    if (y-x === 1 || y-x === 0){
+        return [];
+    // Base Case: if difference btw y and x is 2    
+    } if (y-x === 2){
+        return [x+1]
+    // Recursive Case: if difference btw y and x > 2 
+    } else {
+        var arr = range(x, y-1)
+        arr.push(y-1);
+        return arr; 
+    }
 };
+// console.log(range(2, 9));
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
@@ -40,6 +101,16 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+    // Base Case
+    if (exp === 0){
+        return 1;
+    // Recursive Case
+    } if (exp >  0) { // if exp is positive
+        return (base * exponent(base, exp-1))
+    // Recursive Case
+    } if (exp < 0) { // if exp is negative
+        return ( 1/base * exponent(base, exp + 1).toFixed(4));
+    }
 };
 
 // 8. Determine if a number is a power of two.
@@ -47,14 +118,40 @@ var exponent = function(base, exp) {
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
 var powerOfTwo = function(n) {
+    if (n === 1){
+        return true;
+    }
+    if (n < 1){
+        return false;
+    }
+    return powerOfTwo(n/2);
 };
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+    // Base Case
+    if (string === ""){
+        return "";
+    } // Recursive Case
+    else {
+        return reverse(string.substring(1)) + string.charAt(0);
+    }
 };
+console.log(reverse('donald chen'))
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+    string = string.toLowerCase();
+    // Base Case
+    if (string === "" || string.length === 1){
+        return true;
+    }
+    // Base Case
+    if (string[0] !== string[string.length-1]){
+        return false;
+    }
+    // Recursive Case
+    return palindrome(string.substring(1, string.length-1));
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
