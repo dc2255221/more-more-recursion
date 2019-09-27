@@ -81,16 +81,24 @@ var sumBelow = function(n) {
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
     // Base Case: if difference btw y and x is 0 or 1
-    if (y-x === 1 || y-x === 0){
+    if (y-x === 1 || y-x === 0 || x-y === 1 || x-y === 0){
         return [];
     // Base Case: if difference btw y and x is 2    
     } if (y-x === 2){
         return [x+1]
-    // Recursive Case: if difference btw y and x > 2 
-    } else {
+    // Base Case: if difference btw y and x is -2
+    } if (y-x === -2){
+        return [x-1]
+    // Recursive Case: if difference btw y and x is greater than 2 
+    } if (y-x > 2) {
         var arr = range(x, y-1)
         arr.push(y-1);
         return arr; 
+    // Recursive Case: if difference btw y and x is less than -2
+    } if (y-x < -2) {
+        var arr = range(x, y+1)
+        arr.push(y+1);
+        return arr;
     }
 };
 // console.log(range(2, 9));
