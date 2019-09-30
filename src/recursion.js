@@ -436,9 +436,9 @@ var countKeysInObj = function(obj, key) {
         }
     } return count;
 };
-var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
-console.log(countKeysInObj(obj, 'r')); // 1
-console.log(countKeysInObj(obj, 'e')); // 2
+// var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
+// console.log(countKeysInObj(obj, 'r')); // 1
+// console.log(countKeysInObj(obj, 'e')); // 2
 
 
 // 23. Write a function that counts the number of times a value occurs in an object.
@@ -478,12 +478,13 @@ var fibonacci = function(n) {
     if (n < 1){
         return [0];
     // Base Case
-    } if (n < 2) {
+    } else if (n < 2) {
         return [0, 1];
-    } // Recursive Case
+    } else { // Recursive Case
     arr = fibonacci(n-1);
     arr.push(arr[n-1] + arr[n-2]);
     return arr;
+    }
 }
 // console.log(fibonacci(5)); 
 
@@ -493,8 +494,22 @@ var fibonacci = function(n) {
 // nthFibo(7); // 13
 // nthFibo(3); // 2
 var nthFibo = function(n) {
-     
+    var arr = [0, 1];
+    // Base Case
+    if (n < 1){
+        return arr[0];
+    // Base Case
+    } else if (n < 2) {
+        return arr[1];
+    } else { // Recursive Case
+        arr = fibonacci (n-1);
+        arr.push(arr[n-1] + arr[n-2]);
+        return arr[n];
+    }
 };
+// console.log(nthFibo(5));
+// console.log(nthFibo(7));
+// console.log(nthFibo(3));
 
 // 27. Given an array of words, return a new array containing each word capitalized.
 // var words = ['i', 'am', 'learning', 'recursion'];
@@ -567,8 +582,48 @@ var augmentElements = function(array, aug) {
 // 34. Reduce a series of zeroes to a single 0.
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
-var minimizeZeroes = function(array) {
-};
+var minimizeZeroes = function(array){
+    var result = [];
+    // Base Case
+    if (array.length === 0){
+        return result;
+    // Recursive Case:
+    } if (array[0] !== 0 || (array[0] === 0 && array[1] !== 0)) {
+        result.push(array[0]);
+        result = result.concat(minimizeZeroes(array.slice(1)));
+        return result;
+    } if (array[0] === 0 && array[1] === 0){
+        result = result.concat(minimizeZeroes(array.slice(1)));
+        return result;
+    }
+}
+
+// var minimizeZeroes = function(array) {
+//     var result = [];
+//     // Base Case
+//     if (array.length === 0){ 
+//         return result;
+//     // Recursive Cases
+//     } else { // if array not 0 length
+//         var firstZeroFound = false;
+//         if (array[0] === 0 && !firstZeroFound){ // if first 0 is found
+//             firstZeroFound = true;
+//             result.push(array[0]);
+//             result = result.concat(minimizeZeroes(array.slice(1)));
+//         } 
+//         if (array[0] !== 0){ // if 0 is not found
+//             result.push(array[0]);
+//             array = array.slice(1);
+//             result = result.concat(minimizeZeroes(array.slice(1)));
+//         }
+//         if (array[0] === 0 && firstZeroFound) { // if another 0 is found
+//             result = minimizeZeroes(array.slice(1));
+//         }
+//     } return result;
+// };
+
+console.log(minimizeZeroes([2,0,0,0,1,4]));
+console.log(minimizeZeroes([2,0,0,0,1,0,0,4]));
 
 // 35. Alternate the numbers in an array between positive and negative regardless of
 // their original sign. The first number in the index always needs to be positive.
