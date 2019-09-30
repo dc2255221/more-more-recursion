@@ -587,50 +587,60 @@ var minimizeZeroes = function(array){
     // Base Case
     if (array.length === 0){
         return result;
-    // Recursive Case:
-    } if (array[0] !== 0 || (array[0] === 0 && array[1] !== 0)) {
+    } // Recursive Case: if first index not a 0 
+    if (array[0] !== 0) {
         result.push(array[0]);
         result = result.concat(minimizeZeroes(array.slice(1)));
         return result;
-    } if (array[0] === 0 && array[1] === 0){
+    } // Recursive Case: if first index is a 0 but second index is not 
+    if (array[0] === 0 && array[1] !== 0){
+        result.push(array[0]);
+        result = result.concat(minimizeZeroes(array.slice(1)));
+        return result;
+    } // Recursive Case: if both first and second index is a 0 
+    if (array[0] === 0 && array[1] === 0){ 
         result = result.concat(minimizeZeroes(array.slice(1)));
         return result;
     }
 }
 
-// var minimizeZeroes = function(array) {
-//     var result = [];
-//     // Base Case
-//     if (array.length === 0){ 
-//         return result;
-//     // Recursive Cases
-//     } else { // if array not 0 length
-//         var firstZeroFound = false;
-//         if (array[0] === 0 && !firstZeroFound){ // if first 0 is found
-//             firstZeroFound = true;
-//             result.push(array[0]);
-//             result = result.concat(minimizeZeroes(array.slice(1)));
-//         } 
-//         if (array[0] !== 0){ // if 0 is not found
-//             result.push(array[0]);
-//             array = array.slice(1);
-//             result = result.concat(minimizeZeroes(array.slice(1)));
-//         }
-//         if (array[0] === 0 && firstZeroFound) { // if another 0 is found
-//             result = minimizeZeroes(array.slice(1));
-//         }
-//     } return result;
-// };
-
-console.log(minimizeZeroes([2,0,0,0,1,4]));
-console.log(minimizeZeroes([2,0,0,0,1,0,0,4]));
+// console.log(minimizeZeroes([2,0,0,0,1,4]));
+// console.log(minimizeZeroes([2,0,0,0,1,0,0,4]));
 
 // 35. Alternate the numbers in an array between positive and negative regardless of
 // their original sign. The first number in the index always needs to be positive.
 // alternateSign([2,7,8,3,1,4]) // [2,-7,8,-3,1,-4]
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
+
+let evenIndex = true;
 var alternateSign = function(array) {
+    var result = [];
+    if (array.length === 0){
+        return result;
+    } if (evenIndex && array[0] > 0) {
+        result.push(array[0]);
+        evenIndex = false;
+        result = result.concat(alternateSign(array.slice(1)));
+        return result;
+    } if (evenIndex && array[0] < 0){
+        result.push(-array[0]);
+        evenIndex = false;
+        result = result.concat(alternateSign(array.slice(1)));
+        return result;
+    } if (!evenIndex && array[0] > 0){
+        result.push(-array[0]);
+        evenIndex = true;
+        result = result.concat(alternateSign(array.slice(1)));
+        return result;
+    } if (!evenIndex && array[0] < 0){
+        result.push(array[0]);
+        evenIndex = true;
+        result = result.concat(alternateSign(array.slice(1)));
+        return result;
+    }
 };
+console.log(alternateSign([2,7,8,3,1,4]));
+console.log(alternateSign([-2,-7,8,3,-1,4]));
 
 // 36. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
