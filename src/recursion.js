@@ -450,7 +450,7 @@ var nthFibo = function(n) {
     if (n === 1) {
         return arr[1];
     } // Recursive Case    
-    if (n > 1) { /
+    if (n > 1) { 
         arr = fibonacci (n-1);
         arr.push(arr[n-1] + arr[n-2]);
         return arr[n];
