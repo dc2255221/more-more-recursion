@@ -322,36 +322,7 @@ var buildList = function(value, length) {
 // For multiples of three, output 'Fizz' instead of the number.
 // For multiples of five, output 'Buzz' instead of the number.
 // For numbers which are multiples of both three and five, output “FizzBuzz” instead of the number.
-
 var fizzBuzz = function(n) {
-    // Base Case
-    if (n === 0){
-        return [];
-    } // Recursive Case
-    if (n % 3 === 0 && n % 5 !== 0){
-        arr = fizzBuzz(n-1);
-        arr.push('Fizz');
-        return arr;
-    } // Recursive Case
-    if (n % 3 !== 0 && n % 5 === 0){
-        arr = fizzBuzz(n-1);
-        arr.push('Buzz');
-        return arr;
-    } // Recursive Case
-    if (n % 3 === 0 && n % 5 === 0){
-        arr = fizzBuzz(n-1);
-        arr.push('Fizz Buzz');
-        return arr;
-    } // Recursive Case
-    if (n % 3 !== 0 && n % 5 !== 0){
-        arr = fizzBuzz(n-1);
-        arr.push(n.toString())
-        return arr;
-    }
-};
-
-// Slightly shorter approach
-var fizzBuzz2 = function(n) {
     var results = [];
     // Base Case
     if (n === 0){
@@ -367,41 +338,44 @@ var fizzBuzz2 = function(n) {
         results.push('Fizz Buzz');
     } // Recursive Case
     if (n % 3 !== 0 && n % 5 !== 0){
-        results.push(n.toString())
+        results.push(n.toString());
     }
-    return fizzBuzz2(n-1).concat(results);
+    return fizzBuzz(n-1).concat(results);
 };
-
 // console.log(fizzBuzz(5)); // ['1','2','Fizz','4','Buzz']
-// console.log(fizzBuzz2(5));
 
 // 20. Count the occurence of a value in a list.
 var countOccurrence = function(array, value) {
     // Base Case
     if (array.length === 0){
         return 0;
-    } // Base Case 
-    else if (array[0] !== value){
+    } if (array[0] !== value) { // Recursive Case: if index is value  
         return 0 + countOccurrence(array.slice(1), value);
-    } // Recursive Case
-    else { 
+    } if (array[0] === value) { // Recursive Case: if index is not value
         return 1 + countOccurrence(array.slice(1), value);
     }
 };
 // console.log(countOccurrence([2, 7, 4, 4, 1, 4], 4)); // 3
 // console.log(countOccurrence([2,'banana',4,4,1,'banana'], 'banana')); // 2
 
-
 // 21. Write a recursive version of map.
 var rMap = function(array, callback) {
-    // Base Case
-    if (array.length === 0){
-        return [];
-    } // Recursive Case
-    mapped = rMap(array.slice(0, -1), callback);
-    mapped.push(callback(array[array.length-1]));
-    return mapped;
-};
+    if (array.length === 0) {
+        return array;
+    } 
+    return [callback(array[0])].concat(rMap(array.slice(1), callback));
+}
+
+// var rMap = function(array, callback) {
+//     // Base Case
+//     if (array.length === 0){
+//         return [];
+//     } // Recursive Case
+//     mapped = rMap(array.slice(0, -1), callback);
+//     mapped.push(callback(array[array.length-1]));
+//     return mapped;
+// };
+
 // console.log(rMap([1, 2, 3], function(x){return x * 2})); // [2,4,6] 
 
 // 22. Write a function that counts the number of times a key occurs in an object.
@@ -417,10 +391,10 @@ var countKeysInObj = function(obj, key) {
         }
     } return count;
 };
+
 // var obj = {'e':{'x':'y'},'t':{'r':{'e':'r'},'p':{'y':'r'}},'y':'e'};
 // console.log(countKeysInObj(obj, 'r')); // 1
 // console.log(countKeysInObj(obj, 'e')); // 2
-
 
 // 23. Write a function that counts the number of times a value occurs in an object.
 var countValuesInObj = function(obj, value) {
@@ -451,13 +425,13 @@ var replaceKeysInObj = function(obj, oldKey, newKey) {
 // Example: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34.....
 var fibonacci = function(n) {
     // Base Case
-    if (n < 1) {
+    if (n === 0) { 
         return [0];
     } // Base Case
-    else if (n < 2) {
+    if (n === 1) { 
         return [0, 1];
     } // Recursive Case
-    else { 
+    if (n > 1) { 
     arr = fibonacci(n-1);
     arr.push(arr[n-1] + arr[n-2]);
     return arr;
@@ -470,12 +444,13 @@ var fibonacci = function(n) {
 var nthFibo = function(n) {
     var arr = [0, 1];
     // Base Case
-    if (n < 1){
+    if (n === 0){
         return arr[0];
-    // Base Case
-    } else if (n < 2) {
+    } // Base Case
+    if (n === 1) {
         return arr[1];
-    } else { // Recursive Case
+    } // Recursive Case    
+    if (n > 1) { /
         arr = fibonacci (n-1);
         arr.push(arr[n-1] + arr[n-2]);
         return arr[n];
@@ -560,7 +535,7 @@ var letterTally = function(str, obj = {}) {
     // Base Case
     if (str.length === 0){
         return obj;
-    } // Recursive Cases
+    } // Recursive Case
     if (obj[str[0]] === undefined){ // if letter not in obj yet
        obj[str[0]] = 1;
     } else { // if letter already in obj
@@ -574,12 +549,13 @@ var letterTally = function(str, obj = {}) {
 // elements they should be replaced with a single copy of the element. The order of the
 // elements should not be changed.
 var compress = function(list) {
+    // Base Case
     if (list.length === 0){
         return list;
-    }
+    } // Recursive Case
     if (list[0] === list[1]){
         return compress(list.slice(1));
-    }
+    } // Recursive Case
     if (list[0] !== list[1]){
         return [list[0]].concat(compress(list.slice(1)));
     }
@@ -639,12 +615,13 @@ var alternateSign = function(array) {
 // Assume all numbers are single digits (less than 10).
 var numToText = function(str) {
     var nums = {'1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five', '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine'}
+    // Base Case
     if (str.length === 0){
-        return "";
-    } 
+        return str;
+    } // Recursive Case
     if (nums[str[0]]) {
         return nums[str[0]].concat(numToText(str.substring(1)));
-    }
+    } // Recursive Case
     if (nums[str[0]] === undefined){
         return str[0].concat(numToText(str.substring(1)));
     } 
