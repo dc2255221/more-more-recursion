@@ -206,6 +206,7 @@ var divide = function(x, y) {
         return -1 + divide(x+y, y);
     }
 };
+
 // console.log(divide(0, 6)); // 0
 // console.log(divide(5, 0)); // undefined 
 // console.log(divide(4, 2)); // 2
@@ -222,21 +223,10 @@ var divide = function(x, y) {
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
 var gcd = function(x, y) { 
-    // // Base Case: x > y and no remainder
-    // if (x % y === 0){
-    //     return y;
-    // } // Base Case: y > x and no remainder
-    // if (y % x ===  0){
-    //     return x;
-    // } // Recursive Case
-    // if (x > y && x % y !== 0){
-    //     return gcd(x, y-1);
-    // } // Recursive Case
-    // if (x < y && y % x !== 0){
-    //     return gcd(x-1, y);
-    // }
+    // Base Case
     if (y === 0){
         return x;
+    // Recursive Case
     } return gcd(x, x % y);
 };
 // console.log(gcd(4, 36)); // 4
@@ -417,8 +407,36 @@ var countValuesInObj = function(obj, value) {
 // 24. Find all keys in an object (and nested objects) by a provided name and rename
 // them to a provided new name while preserving the value stored at that key.
 var replaceKeysInObj = function(obj, oldKey, newKey) {
-
+    for (var key in obj){
+        //  Base Case;
+        if (key === oldKey){
+            obj[newKey] = obj[oldKey];
+            delete obj[oldKey];
+        }
+        if (typeof obj[key] === 'object'){
+            obj[key] = replaceKeysInObj(obj[key], oldKey, newKey);
+        }
+    } return obj;
 };
+// var object  = {
+//     '1a' : '*',
+//     '1b' : {'2a' : '',
+//             '2b' : undefined,
+//             '2c' : 0, 
+//             '2d': {'3a': '*',
+//                    '3b' : {'4a': [1,2,3,4],
+//                            '4b': {'5a': '*',
+//                                   '5b': '*'},
+//                            '4c': '*' ,
+//                            '4d': '*', 
+//                            '4e' :'*'},
+//                     '3e': '*'},
+//              '2e': [1,2,3,4],
+//              '2f': '*', 
+//              '2g' : '*'},
+//     '1c' : [1,2,3,4]
+// };
+// console.log(replaceKeysInObj(object, '2e', 'NEW'));
 
 // 25. Get the first n Fibonacci numbers. In the Fibonacci sequence, each subsequent
 // number is the sum of the previous two.
@@ -493,14 +511,15 @@ var capitalizeFirst = function(array) {
 
 // 29. Return the sum of all even numbers in an object containing nested objects.
 var nestedEvenSum = function(obj) {
+    // Base Case
     if (obj.length === 0){
         return 0;
-    }
-    var sum = 0;
+    } var sum = 0;
     for (var key in obj) {
+        // Recursive Case
         if (typeof obj[key] === 'object'){
             sum += nestedEvenSum(obj[key]);
-        } 
+        } // Base Case
         if (typeof obj[key] === 'number' && obj[key] % 2 === 0){
             sum += obj[key];
         }
@@ -636,18 +655,66 @@ var tagCount = function(tag, node) {
 };
 
 // 38. Write a function for binary search.
-// var array = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-// binarySearch(array, 5) // 5
+/* Binary Search: Search a sorted array by repeatedly dividing the search interval in half. Begin with an interval
+ covering the whole array. If the value of the search key is less than the item in the middle of the interval, 
+ narrow the interval to the lower half. Otherwise narrow it to the upper half. Repeatedly check until the value 
+ is found or the interval is empty. */
 // https://www.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search
-var binarySearch = function(array, target, min, max) {
-    
+
+// Recursively updating input min and max
+var binarySearch = function (array, target, min, max) {
+    if (min === undefined) { min = 0; } 
+    if (max === undefined){ max = array.length-1; }
+    var midpoint = Math.floor((min + max) / 2 + min);
+    // Base Case: if array's midpoint is target
+    if (array[midpoint] === target) {
+        return midpoint;
+    } // Recursive Case: if array's midpoint > target
+    if (array[midpoint] > target) {
+        return binarySearch (array, target, 0, midpoint-1);
+    } // Recursive Case: if array's midpoint < target
+    if (array[midpoint] < target) {
+        return binarySearch (array, target, midpoint+1, max);
+    }
 };
 
+// Recursively updating input array
+var binarySearch2 = function (array, target) {
+    var midpoint = Math.floor(array.length / 2);
+    // Base Case: if array's midpoint is target
+    if (array[midpoint] === target){
+        return midpoint;
+    } // Recursive Case: if array's midpoint > target
+    if (array[midpoint] > target){
+        return binarySearch2 (array.slice(0, midpoint), target); 
+    } // Recursive Case: if array's midpoint < target
+    if (array[midpoint] < target){
+        return (midpoint + 1) + binarySearch2 (array.slice(midpoint+1), target);
+    }
+}
+
+// var array = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+// console.log(binarySearch(array, 4)) // 5
+// console.log(binarySearch(array, 5, 3, 10)); // 5
+
 // 39. Write a merge sort function.
-// mergeSort([34,7,23,32,5,62]) // [5,7,23,32,34,62]
+/* Merge Sort is a Divide and Conquer algorithm. It divides input array in two halves, 
+calls itself for the two halves and then merges the two sorted halves. */
 // https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/divide-and-conquer-algorithms
+
 var mergeSort = function(array) {
+    // var midpoint = Math.floor(array.length/2);
+    // var left = array.slice(0, midpoint);
+    // var right = array.slice(midpoint);
+    // var results = [];
+
+    // while (left.length && right.length){
+    //     if (left[0] < right[0]){
+    //         results.concat(mergeSort(left.slice(1))
+    // ...
 };
+// console.log(mergeSort([34,7,23,32,5,62])); // [5,7,23,32,34,62]
+
 
 // 40. Deeply clone objects and arrays.
 // var obj1 = {a:1,b:{bb:{bbb:2}},c:3};
